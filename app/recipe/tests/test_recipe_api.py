@@ -193,7 +193,7 @@ class PrivateRecipeAPITests(TestCase):
 
         payload = {'user': new_user.id}
         url = detail_url(recipe.id)
-        res = self.client.patch(url, payload)
+        self.client.patch(url, payload)
 
         recipe.refresh_from_db()
 
