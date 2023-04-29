@@ -11,16 +11,16 @@ from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
-    PermissionsMixin
+    PermissionsMixin,
 )
 
 
 def recipe_image_file_path(instance, filename):
     """Generate file path for new recipe image"""
     ext = os.path.splitext(filename)[1]
-    filename = f'{uuid.uuid4()}{ext}'
+    filename = f"{uuid.uuid4()}{ext}"
 
-    return os.path.join('uploads', 'recipe', filename)
+    return os.path.join("uploads", "recipe", filename)
 
 
 class UserManager(BaseUserManager):
@@ -58,7 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
 
 
 class Recipe(models.Model):
@@ -77,9 +77,10 @@ class Recipe(models.Model):
         decimal_places=2,
     )
     link = models.CharField(max_length=255, blank=True)
-    tags = models.ManyToManyField('Tag')
-    ingredients = models.ManyToManyField('Ingredient')
+    tags = models.ManyToManyField("Tag")
+    ingredients = models.ManyToManyField("Ingredient")
     image = models.ImageField(null=True, upload_to=recipe_image_file_path)
+    is_private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -87,11 +88,8 @@ class Recipe(models.Model):
 
 class Tag(models.Model):
     """Tag for filtering recipes."""
+
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
 
     def __str__(self):
         return self.name
@@ -99,11 +97,8 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     """Ingredients for recipes."""
+
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
 
     def __str__(self):
         return self.name
