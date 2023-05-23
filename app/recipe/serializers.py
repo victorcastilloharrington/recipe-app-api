@@ -45,6 +45,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             "link",
             "tags",
             "ingredients",
+            "image",
         ]
 
         read_only_fields = ["id"]
